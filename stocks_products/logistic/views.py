@@ -1,17 +1,14 @@
 from rest_framework import viewsets
 from .models import Product, Stock
 from .serializers import ProductSerializer, ProductPositionSerializer
-
+from rest_framework.pagination import
+from .filter import ProductFilter
+from django_filters import rest_framework as filters
 
 class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
-
-    def get_queryset(self):
-        queryset = Product.objects.all()
-        title = self.request.query_params.get('title', None)
-        if title is not None:
-            queryset = queryset.filter(title=title)
-        return queryset
+    filter_backends = [filters.DjangoFilterBackend]
+    filter_class = ProductFilter
 
 
 class StockViewSet(viewsets.ModelViewSet):
